@@ -1,0 +1,19 @@
+@model ClientApp.Models.Case
+
+@{
+    ViewData["Title"] = "Dava Sil";
+}
+
+<h2>Dava Sil</h2>
+
+<div class="alert alert-danger">
+    <p>Bu davayı silmek istediğinize emin misiniz?</p>
+    <p><strong>@Model.CaseNumber</strong> - @Model.CaseSubject</p>
+    <p><strong>Müvekkil:</strong> @Model.Client.FullName</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sil</button>
+    <a asp-action="Index" class="btn btn-secondary">İptal</a>
+</form>

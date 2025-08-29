@@ -1,0 +1,41 @@
+@model IEnumerable<ClientApp.Models.Case>
+
+@{
+    ViewData["Title"] = "Dava Listesi";
+}
+
+<h2>Dava Listesi</h2>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Yeni Dava Ekle</a>
+</p>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Dava No</th>
+            <th>Mahkeme</th>
+            <th>Konu</th>
+            <th>Durum</th>
+            <th>Müvekkil</th>
+            <th>İşlemler</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var c in Model)
+        {
+            <tr>
+                <td>@c.CaseNumber</td>
+                <td>@c.Court</td>
+                <td>@c.CaseSubject</td>
+                <td>@c.CaseStatus</td>
+                <td>@c.Client.FullName</td>
+                <td>
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@c.Id">Detay</a>
+                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@c.Id">Düzenle</a>
+                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@c.Id">Sil</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

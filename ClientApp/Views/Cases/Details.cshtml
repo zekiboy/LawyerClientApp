@@ -1,0 +1,25 @@
+@model ClientApp.Models.Case
+
+<h2>Dava Detayı</h2>
+
+<div class="card p-3">
+    <dl class="row">
+        <dt class="col-sm-3">Dava No</dt>
+        <dd class="col-sm-9">@Model.CaseNumber</dd>
+
+        <dt class="col-sm-3">Mahkeme</dt>
+        <dd class="col-sm-9">@Model.Court</dd>
+
+        <dt class="col-sm-3">Konu</dt>
+        <dd class="col-sm-9">@Model.CaseSubject</dd>
+
+        <dt class="col-sm-3">Durum</dt>
+        <dd class="col-sm-9">@Model.CaseStatus</dd>
+
+        <dt class="col-sm-3">Oluşturulma Tarihi</dt>
+        <dd class="col-sm-9">@Model.CreatedAt.ToString("dd.MM.yyyy HH:mm")</dd>
+    </dl>
+
+    <a class="btn btn-warning" asp-action="Edit" asp-route-id="@Model.Id">Düzenle</a>
+    <a class="btn btn-secondary" asp-action="Index">Listeye Dön</a>
+</div>

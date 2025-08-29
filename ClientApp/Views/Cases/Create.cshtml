@@ -1,0 +1,32 @@
+@model ClientApp.Models.Case
+
+@{
+    ViewData["Title"] = "Yeni Dava Ekle";
+}
+
+<h2>Yeni Dava Ekle</h2>
+
+<form asp-action="Create">
+    <div class="form-group">
+        <label>Dava No</label>
+        <input asp-for="CaseNumber" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Mahkeme</label>
+        <input asp-for="Court" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label>Konu</label>
+        <input asp-for="CaseSubject" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Durum</label>
+        <input asp-for="CaseStatus" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Müvekkil</label>
+        <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Kaydet</button>
+    <a asp-action="Index" class="btn btn-secondary mt-2">İptal</a>
+</form>

@@ -1,0 +1,35 @@
+@model IEnumerable<ClientApp.Models.Case>
+
+@{
+    ViewData["Title"] = "Davalarım";
+}
+
+<h2>Davalarım</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Dava No</th>
+            <th>Mahkeme</th>
+            <th>Konu</th>
+            <th>Durum</th>
+            <th>Oluşturulma Tarihi</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var c in Model)
+    {
+        <tr>
+            <td>@c.CaseNumber</td>
+            <td>@c.Court</td>
+            <td>@c.CaseSubject</td>
+            <td>@c.CaseStatus</td>
+            <td>@c.CreatedAt.ToShortDateString()</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>
+    <a asp-controller="ClientPortal" asp-action="Index" class="btn btn-secondary">Geri</a>
+</p>
