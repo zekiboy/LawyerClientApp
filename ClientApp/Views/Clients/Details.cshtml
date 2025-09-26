@@ -4,15 +4,120 @@
     ViewData["Title"] = "Müvekkil Detay";
 }
 
-<h2>Müvekkil Detay</h2>
+<h2 class="mb-3">Müvekkil Detay</h2>
 
-<div class="card p-3">
-    <p><strong>Ad Soyad:</strong> @Model.FullName</p>
-    <p><strong>Kullanıcı No:</strong> @Model.ClientCode</p>
-    <p><strong>İletişim:</strong> @Model.ContactInfo</p>
+<!-- Müvekkil Bilgileri (Akordiyon) -->
+<div class="accordion mb-4" id="clientInfoAccordion">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingClient">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseClient" aria-expanded="true" aria-controls="collapseClient">
+                Müvekkil Bilgileri
+            </button>
+        </h2>
+        <div id="collapseClient" class="accordion-collapse collapse show" aria-labelledby="headingClient" data-bs-parent="#clientInfoAccordion">
+            <div class="accordion-body row">
+                <div class="col-md-6 mb-2"><strong>Ad Soyad:</strong> @Model.FullName</div>
+                <div class="col-md-6 mb-2"><strong>Kullanıcı No / Client Code:</strong> @Model.ClientCode</div>
+                <div class="col-md-6 mb-2"><strong>Email:</strong> @Model.Email</div>
+                <div class="col-md-6 mb-2"><strong>Telefon:</strong> @Model.PhoneNumber</div>
+                <div class="col-md-12 mb-2"><strong>Adres:</strong> @Model.Address</div>
+                <div class="col-md-4 mb-2"><strong>Şehir:</strong> @Model.City</div>
+                <div class="col-md-4 mb-2"><strong>İlçe:</strong> @Model.District</div>
+                <div class="col-md-4 mb-2"><strong>Posta Kodu:</strong> @Model.PostalCode</div>
+                <div class="col-md-6 mb-2"><strong>Vergi No / T.C. No:</strong> @Model.TaxId</div>
+                <div class="col-md-6 mb-2"><strong>Firma Adı:</strong> @Model.CompanyName</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hasar / Tahkim Bilgileri (Akordiyon) -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingCases">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCases" aria-expanded="false" aria-controls="collapseCases">
+                Hasar / Tahkim Bilgileri
+            </button>
+        </h2>
+        <div id="collapseCases" class="accordion-collapse collapse" aria-labelledby="headingCases" data-bs-parent="#clientInfoAccordion">
+            <div class="accordion-body">
+                @if(Model.Cases != null && Model.Cases.Any())
+                {
+                    <table class="table table-bordered table-striped table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tahkim Başvuru No</th>
+                                <th>Kaza Tarihi</th>
+                                <th>Sigorta Şirketi</th>
+                                <th>Sigorta Başvuru Tarihi</th>
+                                <th>Tahkim Başvuru Tarihi</th>
+                                <th>Durum</th>
+                                <th>Muvekkil Plaka</th>
+                                <th>Karşı Araç Plaka</th>
+                                <th>Detay</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        @foreach(var c in Model.Cases)
+                        {
+                            <tr>
+                                <td>@c.TahkimBasvuruNo</td>
+                                <td>@c.KazaTarihi?.ToString("dd.MM.yyyy")</td>
+                                <td>@c.SigortaSirketi</td>
+                                <td>@c.SigortaBasvuruTarihi?.ToString("dd.MM.yyyy")</td>
+                                <td>@c.TahkimBasvuruTarihi?.ToString("dd.MM.yyyy")</td>
+                                <td>@c.TahkimDurumu</td>
+                                <td>@c.MuvekkilPlaka</td>
+                                <td>@c.KarsiAracPlaka</td>
+                                <td>
+                                    <a class="btn btn-sm btn-info" asp-controller="Cases" asp-action="Details" asp-route-id="@c.Id">Detay</a>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">Müvekkile ait hasar / tahkim dosyası bulunmamaktadır.</p>
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- Ödemeler ve Masraflar (Akordiyon) -->
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="headingPayments">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePayments" aria-expanded="false" aria-controls="collapsePayments">
+                Ödemeler ve Masraflar (Toplamlar)
+            </button>
+        </h2>
+        <div id="collapsePayments" class="accordion-collapse collapse" aria-labelledby="headingPayments" data-bs-parent="#clientInfoAccordion">
+            <div class="accordion-body">
+                @if (Model.Cases != null && Model.Cases.Any())
+                {
+                    <table class="table table-bordered table-striped">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Toplam Müvekkile Ödenen</th>
+                                <th>Toplam Komisyon Ödemesi</th>
+                                <th>Toplam Masraflar</th>
+                                <th>Toplam Bize Kalan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>@Model.Cases.Sum(c => c.MuvekkileOdenen ?? 0).ToString("C", new System.Globalization.CultureInfo("tr-TR"))</td>
+                                <td>@Model.Cases.Sum(c => c.KomisyonOdeme ?? 0).ToString("C", new System.Globalization.CultureInfo("tr-TR"))</td>
+                                <td>@Model.Cases.Sum(c => c.ToplamMasraf ?? 0).ToString("C", new System.Globalization.CultureInfo("tr-TR"))</td>
+                                <td>@Model.Cases.Sum(c => c.BizeKalan ?? 0).ToString("C", new System.Globalization.CultureInfo("tr-TR"))</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">Müvekkile ait ödeme veya masraf kaydı bulunmamaktadır.</p>
+                }
+            </div>
+        </div>
+    </div>
 </div>
-
-<p>
-    <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Düzenle</a>
-    <a asp-action="Index" class="btn btn-secondary">Geri</a>
-</p>

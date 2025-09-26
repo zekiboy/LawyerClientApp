@@ -4,38 +4,54 @@
     ViewData["Title"] = "Dava Listesi";
 }
 
-<h2>Dava Listesi</h2>
+<h2>Hasar / Tahkim Dosyası Listesi</h2>
 
 <p>
-    <a class="btn btn-primary" asp-action="Create">Yeni Dava Ekle</a>
+    <a class="btn btn-primary" asp-action="Create">Yeni Dosya Ekle</a>
 </p>
 
-<table class="table table-bordered table-striped">
+<table id="casesTable" class="table table-bordered table-striped align-middle">
     <thead>
         <tr>
-            <th>Dava No</th>
-            <th>Mahkeme</th>
-            <th>Konu</th>
-            <th>Durum</th>
-            <th>Müvekkil</th>
-            <th>İşlemler</th>
+            <th style="width:15%">Acenta</th>
+            <th style="width:15%">Tahkim Başvuru No</th>
+            <th style="width:12%">Kaza Tarihi</th>
+            <th style="width:12%">Tahkim Başvuru Tarihi</th>
+            <th style="width:15%">Sigorta Başvuru Tarihi</th>
+            <th style="width:15%">Durum</th>
+            <th style="width:16%">İşlemler</th>
         </tr>
     </thead>
     <tbody>
-        @foreach(var c in Model)
+        @foreach (var c in Model)
         {
             <tr>
-                <td>@c.CaseNumber</td>
-                <td>@c.Court</td>
-                <td>@c.CaseSubject</td>
-                <td>@c.CaseStatus</td>
-                <td>@c.Client.FullName</td>
-                <td>
-                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@c.Id">Detay</a>
-                    <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@c.Id">Düzenle</a>
-                    <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@c.Id">Sil</a>
+                <td>@c.Client?.FullName</td>
+                <td>@c.TahkimBasvuruNo</td>
+                <td>@c.KazaTarihi?.ToString("dd.MM.yyyy")</td>
+                <td>@c.TahkimBasvuruTarihi?.ToString("dd.MM.yyyy")</td>
+                <td>@c.SigortaBasvuruTarihi?.ToString("dd.MM.yyyy")</td>
+                <td class="text-truncate" style="max-width: 150px;" title="@c.TahkimDurumu">
+                    @c.TahkimDurumu
                 </td>
+<td>
+    <div class="d-flex">
+        <a class="btn btn-sm btn-info me-2" asp-action="Details" asp-route-id="@c.Id">Detay</a>
+        <a class="btn btn-sm btn-warning me-2" asp-action="Edit" asp-route-id="@c.Id">Düzenle</a>
+        <a class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@c.Id">Sil</a>
+    </div>
+</td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#casesTable').DataTable({
+                "autoWidth": false
+            });
+        });
+    </script>
+}

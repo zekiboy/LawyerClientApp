@@ -15,7 +15,7 @@ namespace ClientApp.Migrations
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "9.0.8");
+            modelBuilder.HasAnnotation("ProductVersion", "9.0.9");
 
             modelBuilder.Entity("ClientApp.Models.Case", b =>
                 {
@@ -23,29 +23,124 @@ namespace ClientApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("CaseNumber")
-                        .IsRequired()
+                    b.Property<decimal?>("BakiyeHasar")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CaseStatus")
-                        .IsRequired()
+                    b.Property<decimal?>("BaroPulu")
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("CaseSubject")
-                        .IsRequired()
+                    b.Property<decimal?>("BasvuruUcreti")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("BilirkişiUcreti")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("BizeKalan")
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ClientId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Court")
-                        .IsRequired()
+                    b.Property<string>("EksperBilgisi")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<string>("EksperRaporu")
                         .HasColumnType("TEXT");
 
-                    b.Property<DateTime>("UpdatedAt")
+                    b.Property<string>("HasarDosyaNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("IcraMasraf")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("IkameAracBilgileri")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("IslahHarci")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("ItirazHarci")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("KarsiAracPlaka")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("KarsiVekalet")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("KaskoPoliceNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("KaskoSirketi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("KazaTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("KismiOdemeTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("KomisyonOdeme")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Komisyoncu")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("KusurOrani")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Muvekkil")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MuvekkilPlaka")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("MuvekkileOdemeTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("MuvekkileOdenen")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("SbmMasraf")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("SigortaBasvuruTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("SigortaKismiOdeme")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SigortaSirketi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TahkimBasvuruNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("TahkimBasvuruTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TahkimDegerKaybi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TahkimDurumu")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TahkimSonrasiOdeme")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("TahkimSonrasiOdemeTarihi")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("TahkimVekaletUcreti")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TcVergiNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<decimal?>("ToplamMasraf")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TrafikPoliceNo")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -61,16 +156,44 @@ namespace ClientApp.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("ClientCode")
-                        .IsRequired()
+                    b.Property<string>("Address")
+                        .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
-                    b.Property<string>("ContactInfo")
+                    b.Property<string>("City")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ClientCode")
                         .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CompanyName")
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("District")
+                        .HasMaxLength(50)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Email")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("FullName")
                         .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("PostalCode")
+                        .HasMaxLength(10)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("TaxId")
+                        .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");

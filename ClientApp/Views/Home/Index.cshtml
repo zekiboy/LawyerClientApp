@@ -4,9 +4,9 @@
 
 <h2 class="mb-4 text-center">Avukat Portalı</h2>
 
-<div class="row g-4">
-    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-    {
+@if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <div class="row g-4">
         <!-- Admin kullanıcı tüm kartları görür -->
 
         <!-- Müvekkil CRUD -->
@@ -30,19 +30,34 @@
                 </div>
             </div>
         </div>
-    }
 
-    <!-- Müvekkil Portalı (herkes görebilir) -->
-    <div class="col-md-4">
-        <div class="card shadow-sm h-100 text-center">
-            <div class="card-body">
-                <h5 class="card-title">Müvekkil Portalı</h5>
-                <p class="card-text">Müvekkiller kendi davalarını sorgulayabilir.</p>
-                <a class="btn btn-primary" asp-controller="ClientPortal" asp-action="Index">Git</a>
+        <!-- Müvekkil Portalı -->
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Müvekkil Portalı</h5>
+                    <p class="card-text">Müvekkiller kendi davalarını sorgulayabilir.</p>
+                    <a class="btn btn-primary" asp-controller="ClientPortal" asp-action="Index">Git</a>
+                </div>
             </div>
         </div>
     </div>
-</div>
+}
+else
+{
+    <!-- Sadece Müvekkil Portalı görünsün ama ortalansın -->
+    <div class="d-flex justify-content-center">
+        <div class="col-md-4">
+            <div class="card shadow-sm h-100 text-center">
+                <div class="card-body">
+                    <h5 class="card-title">Müvekkil Portalı</h5>
+                    <p class="card-text">Müvekkiller kendi davalarını sorgulayabilir.</p>
+                    <a class="btn btn-primary" asp-controller="ClientPortal" asp-action="Index">Git</a>
+                </div>
+            </div>
+        </div>
+    </div>
+}
 
 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
 {
