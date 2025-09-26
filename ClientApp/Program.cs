@@ -1,7 +1,9 @@
-// Prod-ready Program.cs örneği
 using Microsoft.EntityFrameworkCore;
 using ClientApp.Models;
 using Microsoft.AspNetCore.Identity;
+using ClientApp.Repositories;
+using ClientApp.Repositories.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,6 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// Repositoryler
+builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<ICaseRepository, CaseRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
 
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 {
@@ -41,11 +49,11 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 // Basit CSP header ve XSS önlemi
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'");
-    await next();
-});
+// app.Use(async (context, next) =>
+// {
+//     context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'");
+//     await next();
+// });
 
 app.UseRouting();
 app.UseAuthentication();

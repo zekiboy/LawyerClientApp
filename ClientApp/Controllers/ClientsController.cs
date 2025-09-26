@@ -4,23 +4,25 @@ using ClientApp.Models;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using ClientApp.Repositories.Interfaces;
 
 namespace ClientApp.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class ClientsController : Controller
     {
-        private readonly AppDbContext _context;
 
-        public ClientsController(AppDbContext context)
+        private readonly IClientRepository _clientRepository;
+        public ClientsController(IClientRepository clientRepository)
         {
-            _context = context;
+            _clientRepository = clientRepository;
         }
+
 
         // GET: Clients
         public async Task<IActionResult> Index()
         {
-            var clients = await _context.Clients.ToListAsync();
+            var clients = await _clientRepository.GetAllAsync();
             return View(clients);
         }
 
@@ -33,12 +35,15 @@ namespace ClientApp.Controllers
         // POST: Clients/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FullName,ClientCode,ContactInfo")] Client client)
+        public async Task<IActionResult> Create(Client client)
         {
             if (ModelState.IsValid)
             {
-                _context.AddAsync(client);
-                await _context.SaveChangesAsync();
+                // _context.AddAsync(client);
+                // await _context.SaveChangesAsync();
+                // return RedirectToAction(nameof(Index));
+                await _clientRepository.AddAsync(client);
+                await _clientRepository.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(client);
@@ -49,7 +54,7 @@ namespace ClientApp.Controllers
         {
             if (id == null) return NotFound();
 
-            var client = await _context.Clients.FindAsync(id);
+            var client = await _clientRepository.GetByIdAsync(id.Value);
             if (client == null) return NotFound();
 
             return View(client);
@@ -58,7 +63,7 @@ namespace ClientApp.Controllers
         // POST: Clients/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,FullName,ClientCode,ContactInfo")] Client client)
+        public async Task<IActionResult> Edit(int id,  Client client)
         {
             if (id != client.Id) return NotFound();
 
@@ -66,12 +71,13 @@ namespace ClientApp.Controllers
             {
                 try
                 {
-                    _context.Update(client);
-                    await _context.SaveChangesAsync();
+                    await _clientRepository.UpdateAsync(client);
+                    await _clientRepository.SaveAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!_context.Clients.Any(e => e.Id == client.Id)) return NotFound();
+                    var exists = await _clientRepository.GetByIdAsync(client.Id);
+                    if (exists == null) return NotFound();
                     else throw;
                 }
                 return RedirectToAction(nameof(Index));
@@ -85,9 +91,7 @@ namespace ClientApp.Controllers
         {
             if (id == null) return NotFound();
 
-            var client = await _context.Clients
-                .FirstOrDefaultAsync(m => m.Id == id);
-
+            var client = await _clientRepository.GetByIdAsync(id.Value);
             if (client == null) return NotFound();
 
             return View(client);
@@ -98,13 +102,20 @@ namespace ClientApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var client = await _context.Clients.FindAsync(id);
-            if (client != null)
-            {
-                _context.Clients.Remove(client);
-                await _context.SaveChangesAsync();
-            }
+            await _clientRepository.DeleteAsync(id);
+            await _clientRepository.SaveAsync();
             return RedirectToAction(nameof(Index));
+        }
+
+
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var client = await _clientRepository.GetClientWithCasesAsync(id.Value);
+            if (client == null) return NotFound();
+
+            return View(client);
         }
 
 

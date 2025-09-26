@@ -4,7 +4,7 @@
 
 <h2>Dava Sorgulama</h2>
 
-<form method="post" asp-action="Search">
+<form method="post" asp-action="Search" autocomplete="off">
     <div class="form-group">
         <label>Kullanıcı Numaranız:</label>
         <input type="text" name="clientCode" class="form-control" required />
@@ -17,4 +17,43 @@
     <div class="alert alert-danger mt-2">
         @ViewBag.Error
     </div>
+}
+
+@if (Model != null && Model.Any())
+{
+    <h3 class="mt-4">Arama Sonuçları</h3>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Müvekkil</th>
+                <th>TC / Vergi No</th>
+                <th>Dosya No</th>
+                <th>Kaza Tarihi</th>
+                <th>Durum</th>
+                <th>Sigorta Şirketi</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var c in Model)
+            {
+                <tr>
+                    <td>@c.Muvekkil</td>
+                    <td>@c.TcVergiNo</td>
+                    <td>@c.HasarDosyaNo</td>
+                    <td>@c.KazaTarihi?.ToString("dd.MM.yyyy")</td>
+                    <td>@c.TahkimDurumu</td>
+                    <td>@c.SigortaSirketi</td>
+                    <td>
+                        <a class="btn btn-sm btn-info"
+                           asp-controller="ClientPortal"
+                           asp-action="CaseDetails"
+                           asp-route-id="@c.Id">
+                            Detay
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }

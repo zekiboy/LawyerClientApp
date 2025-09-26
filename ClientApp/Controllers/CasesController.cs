@@ -1,49 +1,52 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using ClientApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using ClientApp.Models;
+using ClientApp.Repositories.Interfaces;
 
 namespace ClientApp.Controllers
 {
     [Authorize(Roles = "Admin")]
     public class CasesController : Controller
     {
-        private readonly AppDbContext _context;
+        private readonly ICaseRepository _caseRepository;
+        private readonly IGenericRepository<Client> _clientRepository;
 
-        public CasesController(AppDbContext context)
+        public CasesController(ICaseRepository caseRepository, IGenericRepository<Client> clientRepository)
         {
-            _context = context;
+            _caseRepository = caseRepository;
+            _clientRepository = clientRepository;
         }
-
-        //Dava CRUD (admin/avukat paneli)
 
         // GET: Cases
         public async Task<IActionResult> Index()
         {
-            var cases = _context.Cases.Include(c => c.Client);
-            return View(await cases.ToListAsync());
+            var cases = await _caseRepository.GetCasesWithClientsAsync();
+            return View(cases);
         }
 
         // GET: Cases/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "FullName");
-            return View();
+            var clients = await _clientRepository.GetAllAsync();
+            ViewData["ClientId"] = new SelectList(clients, "Id", "FullName");
+            return View(new Case());
         }
 
         // POST: Cases/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,CaseNumber,Court,CaseSubject,CaseStatus,ClientId")] Case @case)
+        public async Task<IActionResult> Create(Case @case)
         {
             if (ModelState.IsValid)
             {
-                _context.AddAsync(@case);
-                await _context.SaveChangesAsync();
+                await _caseRepository.AddAsync(@case);
+                await _caseRepository.SaveAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "FullName", @case.ClientId);
+
+            var clients = await _clientRepository.GetAllAsync();
+            ViewData["ClientId"] = new SelectList(clients, "Id", "FullName", @case.ClientId);
             return View(@case);
         }
 
@@ -52,17 +55,18 @@ namespace ClientApp.Controllers
         {
             if (id == null) return NotFound();
 
-            var @case = await _context.Cases.FindAsync(id);
+            var @case = await _caseRepository.GetByIdAsync(id.Value);
             if (@case == null) return NotFound();
 
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "FullName", @case.ClientId);
+            var clients = await _clientRepository.GetAllAsync();
+            ViewData["ClientId"] = new SelectList(clients, "Id", "FullName", @case.ClientId);
             return View(@case);
         }
 
         // POST: Cases/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,CaseNumber,Court,CaseSubject,CaseStatus,ClientId")] Case @case)
+        public async Task<IActionResult> Edit(int id, Case @case)
         {
             if (id != @case.Id) return NotFound();
 
@@ -70,17 +74,20 @@ namespace ClientApp.Controllers
             {
                 try
                 {
-                    _context.Update(@case);
-                    await _context.SaveChangesAsync();
+                    await _caseRepository.UpdateAsync(@case);
+                    await _caseRepository.SaveAsync();
                 }
-                catch (DbUpdateConcurrencyException)
+                catch
                 {
-                    if (!_context.Cases.Any(e => e.Id == @case.Id)) return NotFound();
+                    var exists = await _caseRepository.GetByIdAsync(@case.Id);
+                    if (exists == null) return NotFound();
                     else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Clients, "Id", "FullName", @case.ClientId);
+
+            var clients = await _clientRepository.GetAllAsync();
+            ViewData["ClientId"] = new SelectList(clients, "Id", "FullName", @case.ClientId);
             return View(@case);
         }
 
@@ -89,8 +96,7 @@ namespace ClientApp.Controllers
         {
             if (id == null) return NotFound();
 
-            var @case = await _context.Cases.Include(c => c.Client)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var @case = await _caseRepository.GetCaseDetailsAsync(id.Value);
             if (@case == null) return NotFound();
 
             return View(@case);
@@ -101,12 +107,8 @@ namespace ClientApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @case = await _context.Cases.FindAsync(id);
-            if (@case != null)
-            {
-                _context.Cases.Remove(@case);
-                await _context.SaveChangesAsync();
-            }
+            await _caseRepository.DeleteAsync(id);
+            await _caseRepository.SaveAsync();
             return RedirectToAction(nameof(Index));
         }
 
@@ -115,8 +117,7 @@ namespace ClientApp.Controllers
         {
             if (id == null) return NotFound();
 
-            var @case = await _context.Cases.Include(c => c.Client)
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var @case = await _caseRepository.GetCaseDetailsAsync(id.Value);
             if (@case == null) return NotFound();
 
             return View(@case);

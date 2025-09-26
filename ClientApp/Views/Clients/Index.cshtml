@@ -6,22 +6,26 @@
     <a class="btn btn-primary" asp-action="Create">Yeni Müvekkil Ekle</a>
 </p>
 
-<table class="table table-bordered">
+<table id="clientsTable"  class="table table-bordered">
     <thead>
         <tr>
             <th>Ad Soyad</th>
             <th>Kullanıcı No</th>
             <th>İletişim</th>
+            <th>İşlemler</th>
         </tr>
     </thead>
- <tbody>
-        @foreach(var client in Model)
+    <tbody>
+        @foreach (var client in Model)
         {
             <tr>
                 <td>@client.FullName</td>
                 <td>@client.ClientCode</td>
-                <td>@client.ContactInfo</td>
+                <td>@client.Email</td>
                 <td>
+                    <!-- Detay Butonu -->
+                    <a class="btn btn-sm btn-info" asp-action="Details" asp-route-id="@client.Id">Detay</a>
+
                     <!-- Edit Butonu -->
                     <a class="btn btn-sm btn-warning" asp-action="Edit" asp-route-id="@client.Id">Düzenle</a>
 
@@ -32,3 +36,13 @@
         }
     </tbody>
 </table>
+
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#clientsTable').DataTable();
+        });
+    </script>
+}
