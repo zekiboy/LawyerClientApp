@@ -1,29 +1,223 @@
 @model ClientApp.Models.Case
 
+@{
+    ViewData["Title"] = "Dava Düzenle";
+}
+
 <h2>Dava Düzenle</h2>
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="ClientId" />
-    <div class="form-group">
-        <label>Dava No</label>
-        <input asp-for="CaseNumber" class="form-control" />
+<form asp-action="Edit" method="post" autocomplete="off">
+    <input type="hidden" asp-for="Id" />
+
+    <div class="row g-3">
+
+        <!-- Müvekkil bilgileri -->
+        <div class="col-md-6 mb-2">
+            <label>Müvekkil</label>
+            <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
+            <span asp-validation-for="ClientId" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Müvekkil Araç Sahibi</label>
+            <input asp-for="Muvekkil" class="form-control" />
+            <span asp-validation-for="Muvekkil" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6 mb-2">
+            <label>TC / Vergi No</label>
+            <input asp-for="TcVergiNo" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Dosya No</label>
+            <input asp-for="HasarDosyaNo" class="form-control" />
+        </div>
+
+        <!-- Kaza ve Sigorta bilgileri -->
+        <div class="col-md-6 mb-2">
+            <label>Kaza Tarihi</label>
+            <input asp-for="KazaTarihi" type="date" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Sigorta Şirketi</label>
+            <input asp-for="SigortaSirketi" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-2">
+            <label>Kasko Şirketi</label>
+            <input asp-for="KaskoSirketi" class="form-control" />
+        </div>
+
+        <!-- Eksper bilgileri -->
+        <div class="col-md-6 mb-2">
+            <label>Eksper Raporu</label>
+            <input asp-for="EksperRaporu" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Eksper Bilgisi</label>
+            <input asp-for="EksperBilgisi" class="form-control" />
+        </div>
+
+        <!-- Tahkim bilgileri -->
+        <div class="col-md-6 mb-2">
+            <label>Tahkim Durumu</label>
+            <input asp-for="TahkimDurumu" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Tahkim Başvuru Tarihi</label>
+            <input asp-for="TahkimBasvuruTarihi" type="date" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-2">
+            <label>Tahkim Başvuru No</label>
+            <input asp-for="TahkimBasvuruNo" class="form-control" />
+        </div>
+
+        <!-- Araç bilgileri -->
+        <div class="col-md-6 mb-2">
+            <label>Muvekkil Plaka</label>
+            <input asp-for="MuvekkilPlaka" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Karşı Araç Plaka</label>
+            <input asp-for="KarsiAracPlaka" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-2">
+            <label>Trafik Poliçe No</label>
+            <input asp-for="TrafikPoliceNo" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Kasko Poliçe No</label>
+            <input asp-for="KaskoPoliceNo" class="form-control" />
+        </div>
+
+
+        <!-- Sigorta başvuru ve ikame araç bilgileri -->
+        <div class="col-md-6 mb-2">
+            <label>Sigorta Şirketine Başvuru Tarihi</label>
+            <input asp-for="SigortaBasvuruTarihi" type="date" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>İkame Araç</label>
+            <input asp-for="IkameAracBilgileri" class="form-control" />
+        </div>
+
+        <!-- Sigorta kısmi ödeme bilgileri -->
+        <div class="col-md-6 mb-2">
+            <label>Sigorta Kısmi Ödemesi</label>
+            <input asp-for="SigortaKismiOdeme" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Kısmi Ödeme Tarihi</label>
+            <input asp-for="KismiOdemeTarihi" type="date" class="form-control" />
+        </div>
+
+        <!-- Kaza kusur oranı -->
+        <div class="col-md-6 mb-2">
+            <label>Kaza Kusur Oranı (%)</label>
+            <input asp-for="KusurOrani" type="number" min="0" max="100" class="form-control" />
+        </div>
+
+
+
+        <!-- Ödeme bilgileri -->
+        <div class="col-md-4 mb-2">
+            <label>Müvekkile Ödenen</label>
+            <input asp-for="MuvekkileOdenen" type="number" step="0.01" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-2">
+            <label>Ödeme Tarihi</label>
+            <input asp-for="MuvekkileOdemeTarihi" type="date" class="form-control" />
+        </div>
+        <div class="col-md-4 mb-2">
+            <label>Bize Kalan</label>
+            <input asp-for="BizeKalan" type="number" step="0.01" class="form-control" />
+        </div>
+
+        <div class="col-md-6 mb-2">
+            <label>Komisyoncu</label>
+            <input asp-for="Komisyoncu" class="form-control" />
+        </div>
+        <div class="col-md-6 mb-2">
+            <label>Komisyon Ödeme</label>
+            <input asp-for="KomisyonOdeme" type="number" step="0.01" class="form-control" />
+        </div>
+
+<!-- Masraflar -->
+<h5 class="mt-3">Masraflar</h5>
+<div class="row">
+    <div class="col-md-3 mb-2">
+        <label>Başvuru Ücreti</label>
+        <input asp-for="BasvuruUcreti" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>Bakiye Hasar</label>
+        <input asp-for="BakiyeHasar" type="number" step="0.01" class="form-control" />
+        <span asp-validation-for="BakiyeHasar" class="text-danger"></span>
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>Baro Pulu</label>
+        <input asp-for="BaroPulu" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>Bilirkişi Ücreti</label>
+        <input asp-for="BilirkişiUcreti" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>Islah Harcı</label>
+        <input asp-for="IslahHarci" type="number" step="0.01" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label>Mahkeme</label>
-        <input asp-for="Court" class="form-control" />
+    <div class="col-md-3 mb-2">
+        <label>SBM Masraf</label>
+        <input asp-for="SbmMasraf" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>Karşı Vekalet</label>
+        <input asp-for="KarsiVekalet" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>İtiraz Harcı</label>
+        <input asp-for="ItirazHarci" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>İcra Masraf</label>
+        <input asp-for="IcraMasraf" type="number" step="0.01" class="form-control" />
     </div>
 
-    <div class="form-group">
-        <label>Konu</label>
-        <input asp-for="CaseSubject" class="form-control" />
+    <div class="col-md-3 mb-2">
+        <label>Toplam Masraf</label>
+        <input asp-for="ToplamMasraf" type="number" step="0.01" class="form-control" />
     </div>
+</div>
 
-    <div class="form-group">
-        <label>Durum</label>
-        <input asp-for="CaseStatus" class="form-control" />
+<!-- Tahkim Sonuçları -->
+<h5 class="mt-3">Tahkim Sonuçları</h5>
+<div class="row">
+    <div class="col-md-3 mb-2">
+        <label>Değer Kaybı</label>
+        <input asp-for="TahkimDegerKaybi" type="number" step="0.01" class="form-control" />
     </div>
+    <div class="col-md-3 mb-2">
+        <label>Vekalet Ücreti</label>
+        <input asp-for="TahkimVekaletUcreti" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>Sonraki Ödeme</label>
+        <input asp-for="TahkimSonrasiOdeme" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="col-md-3 mb-2">
+        <label>Sonraki Ödeme Tarihi</label>
+        <input asp-for="TahkimSonrasiOdemeTarihi" type="date" class="form-control" />
+    </div>
+</div>
 
-    <button type="submit" class="btn btn-primary mt-2">Kaydet</button>
-    <a asp-action="Index" class="btn btn-secondary mt-2">İptal</a>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Kaydet</button>
+        <a asp-action="Index" class="btn btn-secondary">İptal</a>
+    </div>
 </form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

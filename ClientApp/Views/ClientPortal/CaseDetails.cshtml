@@ -1,0 +1,133 @@
+@model ClientApp.Models.Case
+
+@{
+    ViewData["Title"] = "Dava Detayı";
+}
+
+<div class="container mt-4">
+    <!-- Müvekkil Bilgisi -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">Müvekkil Bilgisi</h5>
+        </div>
+        <div class="card-body">
+            <div class="accordion" id="clientAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="clientHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#clientDetails" aria-expanded="true" aria-controls="clientDetails">
+                            Detaylar
+                        </button>
+                    </h2>
+                    <div id="clientDetails" class="accordion-collapse collapse show" aria-labelledby="clientHeading" data-bs-parent="#clientAccordion">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-2">
+                                    <strong>Araç Sahibi:</strong> @Model.Muvekkil
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <strong>TC / Vergi No:</strong> @Model.TcVergiNo
+                                </div>
+                                <div class="col-md-6 mb-2">
+                                    <strong>Acenta:</strong> @Model.Client?.FullName
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dava / Dosya Bilgileri -->
+    <div class="card shadow-sm">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">Dava / Dosya Bilgileri</h5>
+        </div>
+        <div class="card-body">
+            <div class="accordion" id="caseAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="caseHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#caseDetails" aria-expanded="true" aria-controls="caseDetails">
+                            Detaylar
+                        </button>
+                    </h2>
+                    <div id="caseDetails" class="accordion-collapse collapse show" aria-labelledby="caseHeading" data-bs-parent="#caseAccordion">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-2"><strong>Dosya No:</strong> @Model.HasarDosyaNo</div>
+                                <div class="col-md-6 mb-2"><strong>Kaza Tarihi:</strong> @Model.KazaTarihi?.ToString("dd.MM.yyyy")</div>
+                                <div class="col-md-6 mb-2"><strong>Kaza Kusur Oranı (%):</strong> @Model.KusurOrani</div>
+                                <div class="col-md-6 mb-2"><strong>Sigorta Şirketi:</strong> @Model.SigortaSirketi</div>
+                                <div class="col-md-6 mb-2"><strong>Sigorta Başvuru Tarihi:</strong> @Model.SigortaBasvuruTarihi?.ToString("dd.MM.yyyy")</div>
+                                <div class="col-md-6 mb-2"><strong>Kasko Şirketi:</strong> @Model.KaskoSirketi</div>
+                                <div class="col-md-6 mb-2"><strong>Eksper Raporu:</strong> @Model.EksperRaporu</div>
+                                <div class="col-md-6 mb-2"><strong>Eksper Bilgisi:</strong> @Model.EksperBilgisi</div>
+                                <div class="col-md-6 mb-2"><strong>Tahkim Durumu:</strong> @Model.TahkimDurumu</div>
+                                <div class="col-md-6 mb-2"><strong>Tahkim Başvuru Tarihi:</strong> @Model.TahkimBasvuruTarihi?.ToString("dd.MM.yyyy")</div>
+                                <div class="col-md-6 mb-2"><strong>Tahkim Başvuru No:</strong> @Model.TahkimBasvuruNo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Araç Bilgileri -->
+            <h6>Araç Bilgileri</h6>
+            <div class="accordion" id="vehicleAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="vehicleHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#vehicleDetails" aria-expanded="true" aria-controls="vehicleDetails">
+                            Detaylar
+                        </button>
+                    </h2>
+                    <div id="vehicleDetails" class="accordion-collapse collapse show" aria-labelledby="vehicleHeading" data-bs-parent="#vehicleAccordion">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-2"><strong>Muvekkil Plaka:</strong> @Model.MuvekkilPlaka</div>
+                                <div class="col-md-6 mb-2"><strong>Karşı Araç Plaka:</strong> @Model.KarsiAracPlaka</div>
+                                <div class="col-md-6 mb-2"><strong>İkame Araç:</strong> @Model.IkameAracBilgileri</div>
+                                <div class="col-md-6 mb-2"><strong>Trafik Poliçe No:</strong> @Model.TrafikPoliceNo</div>
+                                <div class="col-md-6 mb-2"><strong>Kasko Poliçe No:</strong> @Model.KaskoPoliceNo</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <!-- Ödeme Bilgileri -->
+            <h6>Ödeme Bilgileri</h6>
+            <div class="accordion" id="paymentAccordion">
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="paymentHeading">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#paymentDetails" aria-expanded="true" aria-controls="paymentDetails">
+                            Detaylar
+                        </button>
+                    </h2>
+                    <div id="paymentDetails" class="accordion-collapse collapse show" aria-labelledby="paymentHeading" data-bs-parent="#paymentAccordion">
+                        <div class="accordion-body">
+                            <div class="row">
+                                <div class="col-md-6 mb-2"><strong>Müvekkile Ödenen:</strong> @Model.MuvekkileOdenen</div>
+                                <div class="col-md-6 mb-2"><strong>Ödeme Tarihi:</strong> @Model.MuvekkileOdemeTarihi?.ToString("dd.MM.yyyy")</div>
+                                <div class="col-md-6 mb-2"><strong>Sigorta Kısmi Ödemesi:</strong> @Model.SigortaKismiOdeme</div>
+                                <div class="col-md-6 mb-2"><strong>Kısmi Ödeme Tarihi:</strong> @Model.KismiOdemeTarihi?.ToString("dd.MM.yyyy")</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="mt-3">
+        <form method="post" asp-controller="ClientPortal" asp-action="Search">
+            <input type="hidden" name="clientCode" value="@Model.Client?.ClientCode" />
+            <button type="submit" class="btn btn-secondary">Geri</button>
+        </form>
+    </div>
+</div>

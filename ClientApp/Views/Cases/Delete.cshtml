@@ -1,15 +1,15 @@
 @model ClientApp.Models.Case
 
 @{
-    ViewData["Title"] = "Dava Sil";
+    ViewData["Title"] = "Dosya Sil";
 }
 
-<h2>Dava Sil</h2>
+<h2>Dosya Sil</h2>
 
 <div class="alert alert-danger">
-    <p>Bu davayı silmek istediğinize emin misiniz?</p>
-    <p><strong>@Model.CaseNumber</strong> - @Model.CaseSubject</p>
-    <p><strong>Müvekkil:</strong> @Model.Client.FullName</p>
+    <p>Bu hasar / tahkim dosyasını silmek istediğinize emin misiniz?</p>
+    <p><strong>@Model.HasarDosyaNo</strong> - @Model.Muvekkil</p>
+    <p><strong>Müvekkil:</strong> @Model.Muvekkil</p>
 </div>
 
 <form asp-action="Delete" method="post">

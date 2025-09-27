@@ -14,7 +14,28 @@ namespace ClientApp.Models
         public string ClientCode { get; set; }
 
         [EmailAddress]
-        public string ContactInfo { get; set; } // İsteğe bağlı (telefon, mail vs.)
+        public string? Email { get; set; }
+
+        [Phone]
+        public string? PhoneNumber { get; set; }
+
+        [StringLength(200)]
+        public string? Address { get; set; }
+
+        [StringLength(50)]
+        public string? City { get; set; }
+
+        [StringLength(50)]
+        public string? District { get; set; }
+
+        [StringLength(10)]
+        public string? PostalCode { get; set; }
+
+        [StringLength(50)]
+        public string? TaxId { get; set; } // Vergi No veya T.C. No
+
+        [StringLength(100)]
+        public string? CompanyName { get; set; } // Opsiyonel
 
         // Navigation property
         public List<Case>? Cases { get; set; }
